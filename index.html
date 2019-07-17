@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en-us">
+    <head>
+
+        <meta charset="utf-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+        <style type=”text/css”>
+            p {
+                margin: 1.5em 10px 1.5em 10px;
+            }
+            .hausaufgabe {
+                font-weight: normal;
+                font-size: 2em;
+            }
+        </style>
+
+        <meta name="author" content="Gregor Kwaczynski" />
+        <title>Hausaufgabe: Newsletter</title>
+
+    </head>
+    <body lang="de-DE">
+
+        <script src="//code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+        <h1 style="text-align: center">Hausaufgabe: Newsletterregistrierung</h1>
+        <ol>
+            <li><p class="hausaufgabe">Szenario</p>
+                <p class="hausaufgabe">Für die Website soll eine
+                Newsletter-Registrierung programmiert werden. Es geht nur um die
+                Registrierung zum Erhalt des Newsletters. Der eigentliche Versand
+                ist für diese Aufgabe nicht vorgesehen.</p>
+            </li>
+
+            <li><p class="hausaufgabe">Funktionen</p>
+                <ol>
+                    <li><p class="hausaufgabe">Registrierung</p>
+                        <p class="hausaufgabe">Die Registrierung für den
+                        Newsletter läuft folgendermaßen ab:</p>
+
+                        <ol>
+                            <li><p class="hausaufgabe">Nutzer
+                            besucht eine beliebige Seite von kvk (Für die Aufgabe reicht eine
+                            dummy HTML-Seite)</p></li>
+                            <li><p class="hausaufgabe">Nach
+                            ein paar Sekunden erscheint per JavaScript ein Popup. Darin
+                            befindet sich ein Formular zum Eingeben der E-Mail-Adresse</p></li>
+                            <li><p class="hausaufgabe">Nutzer
+                            trägt seine E-Mail-Adresse ein und drückt auf „Registrieren“</p></li>
+                            <li><p class="hausaufgabe">Per
+                            Ajax werden die Formulardaten abgeschickt und in der Datenbank
+                            gespeichert.</p></li>
+                            <li><p class="hausaufgabe">Nutzer
+                            erhält Erfolgsmeldung.</p></li>
+                        </ol>
+
+                        <p class="hausaufgabe">Validierung:</p>
+                        <ul>
+                            <li><p class="hausaufgabe">Eine
+                                E-Mail-Adresse darf nicht doppelt registriert werden</p>
+                            </li>
+                        </ul>
+                    </li>      
+
+                    <li><p class="hausaufgabe">Rahmenbedingungen</p>
+                        <p class="hausaufgabe">Für die Aufgabe ist eine Kombination
+                        aus HTML/CSS/JavaScript/MySQL notwendig. Die Wahl der verwendeten
+                        Bibliotheken ist frei.</p>
+                        <p class="hausaufgabe">Die Gestaltung ist bei der Erfüllung
+                        der Aufgabe zweitranging. Hauptkriterien sind:</p>
+                        <ul>
+                            <li><p class="hausaufgabe">Wartbarer Code</p>
+                            <li><p class="hausaufgabe">Sinnvoller Einsatz der
+                            Technologien</p>
+                            <li><p class="hausaufgabe">100% Funktionalität</p>
+                        </ul>
+                    </li>
+                </ol>
+                <p class="hausaufgabe">Falls die Aufgabe auf einer lokalen
+                Entwicklungsumgebung erledigt wird, sollte eine
+                Installationsanleitung beiliegen, um die Datenbank einzurichten.</p>
+            </li>
+        </ol>
+
+        <div class="modal fade" id="newsletterRegistrierung" tabindex="-1" role="dialog" aria-labelledby="Newsletterregistrierung" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Newsletterregistrierung</h5>
+                        <a class="close" type="button" class="close" data-dismiss="modal" aria-label="Schliessen">
+                            <span aria-hidden="true">&times;</p>
+                        </a>
+                    </div>
+                    <div class="modal-body">
+
+                        <form id="erstelleAdresseFormular" onsubmit="return false">
+                            e-Mail: <input type="text" id="eMailAdresse" class="text"><br/> 
+                            <input type="hidden" name="newsletterToken" id="newsletterToken"><br/>
+                            <button type="button" class="button" id="erstelleAdresseButton">Eintragen</button>
+                        </form>
+
+                        <br/>
+
+                        <p style="font-weight: bolder">
+                            Letzter Status:
+                        </p>
+
+                        <div id="letzterStatus" style="font-style: italic">
+                        </div>
+
+                        <p id="refreshLink" style="text-align: center">
+                        </p>
+                        
+                        <script type="text/javascript">
+
+                            $(document).ready(function() 
+                            {
+                                window.setTimeout(function ()
+                                {
+                                    $("#newsletterRegistrierung").modal("show");
+                                }, 3333);
+
+                                $.ajax({
+                                    url: "methoden/erstelleToken.php",
+                                    crossDomain: false,
+                                    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                                    method: "GET",
+                                    dataType: "json",
+
+                                    success: function(antwort)
+                                    {
+                                        letzterStatus = new Date().toLocaleString();
+                                        letzterStatus += "<br/>\n";
+
+                                        if ( antwort.status === "ok" )
+                                        {
+                                            document.getElementById( 'newsletterToken' ).value = antwort.wert;
+                                            letzterStatus += "OK: Neuer Token<br/>\n";
+                                        }
+                                        else if ( antwort.status === "error" )
+                                            letzterStatus += "Fehler: "+ antwort.nachricht +"<br/>\n";
+                                        else
+                                            letzterStatus += "Fehler: unbekannte Antwort<br/>\n";
+                                        
+                                        letzterStatus += "<br/>\n";
+
+                                        console.log( letzterStatus );
+                                        document.getElementById( 'letzterStatus' ).innerHTML = letzterStatus;
+                                    },
+
+                                    error: function ( jqXHR, ausnahme )
+                                    {
+                                        letzterStatus = new Date().toLocaleString();
+                                        letzterStatus += "<br/>\nFehler:";
+
+                                        if (jqXHR.status === 0)
+                                            letzterStatus += "Keine Netzwerkverbindung. Netzwerk prüfen.";
+                                        else if (jqXHR.status == 404)
+                                            letzterStatus += "Seite nicht gefunden. [404]";
+                                        else if (jqXHR.status == 500)
+                                            letzterStatus += "Internal Server Error [500].";
+                                        else if (ausnahme === "parsererror")
+                                            letzterStatus += "Verarbeitung der Antwort fehlgeschlagen.";
+                                        else if (ausnahme === "timeout")
+                                            letzterStatus += "Timeout Fehler.";
+                                        else if (ausnahme === "abort")
+                                            letzterStatus += "Ajax Anfrage abgebrochen.";
+                                        else
+                                            letzterStatus += "Unbekannter Fehler.<br/>\n" + jqXHR.responseText;
+
+                                        letzterStatus += "<br/>\n";
+
+                                        console.log( letzterStatus );
+                                        document.getElementById( 'letzterStatus' ).innerHTML = letzterStatus;
+                                    }
+                                });
+
+                                $('#erstelleAdresseButton').click(function()
+                                {    
+                                    newsletterToken = document.getElementById( 'newsletterToken' ).value;
+                                    eMailAdresse = document.getElementById( 'eMailAdresse' ).value;
+
+                                    anfrage = { "token" : newsletterToken, "adresse" : eMailAdresse };
+
+                                    $.ajax({
+                                        url: "methoden/erstelleAdresse.php",
+                                        crossDomain: false,
+                                        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                                        method: "POST",
+                                        data: { "anfrage" : anfrage },
+                                        dataType: "json",
+                                        
+                                        success: function(antwort)
+                                        {
+                                            letzterStatus = new Date().toLocaleString();
+                                            letzterStatus += "<br/>\n";
+                                            
+                                            if ( antwort.status === "ok" )
+                                            {
+                                                letzterStatus += "OK: Adresseintrag wurde erstellt.<br/>\n";
+
+                                                refreshLink = '<a href="#" onclick="location.reload()" style="text-align: center">';
+                                                refreshLink += '♻Seite neuladen, um fortzufahrenn♻</a>';
+                                                document.getElementById( 'refreshLink' ).innerHTML = refreshLink;
+                                            }
+
+                                            else if ( antwort.status === "error" )
+                                                letzterStatus += "Fehler: "+ antwort.nachricht +"<br/>\n";
+                                            else
+                                                letzterStatus += "Fehler: unbekannte Antwort<br/>\n";
+
+                                            letzterStatus += "<br/>\n";
+
+                                            console.log( letzterStatus );
+                                            document.getElementById( 'letzterStatus' ).innerHTML = letzterStatus;
+                                        },
+
+                                        error: function ( jqXHR, ausnahme )
+                                        {
+                                            letzterStatus = new Date().toLocaleString();
+                                            letzterStatus += "<br/>\nFehler:";
+
+                                            if (jqXHR.status === 0)
+                                                letzterStatus += "Keine Netzwerkverbindung. Netzwerk prüfen.";
+                                            else if (jqXHR.status == 404)
+                                                letzterStatus += "Seite nicht gefunden. [404]";
+                                            else if (jqXHR.status == 500)
+                                                letzterStatus += "Internal Server Error [500].";
+                                            else if (ausnahme === "parsererror")
+                                                letzterStatus += "Verarbeitung der Antwort fehlgeschlagen.";
+                                            else if (ausnahme === "timeout")
+                                                letzterStatus += "Timeout Fehler.";
+                                            else if (ausnahme === "abort")
+                                                letzterStatus += "Ajax Anfrage abgebrochen.";
+                                            else
+                                                letzterStatus += "Unbekannter Fehler.<br/>\n" + jqXHR.responseText;
+
+                                            letzterStatus += "<br/>\n";
+
+                                            console.log( letzterStatus );
+                                            document.getElementById( 'letzterStatus' ).innerHTML = letzterStatus;
+                                        }
+                                    });
+                                });
+                            });
+                        </script>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="close" type="button" class="btn btn-secondary" data-dismiss="modal">Schliessen</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
